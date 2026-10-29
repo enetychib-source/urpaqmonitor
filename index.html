@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1728">
+  <meta name="description" content="Urpaq Monitor — система гидрологического мониторинга Казахстана и USB-мониторинга уровня воды Arduino.">
+  <title>Urpaq Monitor — Гидрологический мониторинг Казахстана</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">≈</div>
+      <div>URPAQ <span class="brand-accent">MONITOR</span><small id="subHeader">Гидрологический мониторинг Казахстана</small></div>
+    </div>
+    <div class="top-right">
+      <a href="#arduinoPanelSection" class="btn nav-jump-btn" id="navArduinoBtn">🔌 Arduino</a>
+      <a href="#arduinoAnalyticsSection" class="btn nav-jump-btn" id="navChartBtn">📈 График</a>
+      <a href="history.html" target="_blank" class="btn nav-jump-btn" id="navHistoryTabBtn" title="Открыть журнал и аналитику показаний в отдельной вкладке">📋 История (вкладка ↗)</a>
+      <a href="#mapwrap" class="btn nav-jump-btn" id="navMapBtn">🗺 Карта</a>
+      <a href="https://t.me/urpaqmonitor_bot" target="_blank" rel="noopener noreferrer" class="tg-btn" id="tgBtn">✈ Telegram Бот</a>
+      <button class="btn" id="themeToggle" type="button" title="Переключить тему">🌙 Темная</button>
+      <select id="lang" aria-label="Язык">
+        <option value="ru">Русский</option>
+        <option value="kk">Қазақша</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside id="sidebar">
+      <h1 class="title" id="title">Мониторинг вод</h1>
+      <p class="muted" id="intro">Офлайн-архив гидрологических наблюдений.</p>
+      <p class="muted" id="liveSidebarInfo" hidden></p>
+
+      <div id="archiveStationList">
+        <label class="searchlabel" for="search" id="searchLabel">ПОИСК ПОСТА ИЛИ ГОРОДА</label>
+        <input class="search" id="search" type="search" placeholder="Например, Петропавловск..." autocomplete="off">
+        <div class="sect" id="citiesLabel">АРХИВНЫЙ СПИСОК ПОСТОВ</div>
+        <div class="cities" id="cities"></div>
+      </div>
+
+      <div class="push-box">
+        <p id="pushText">🔔 Подписаться на Web Push алерты о паводках</p>
+        <button class="btn push-btn" id="pushBtn" type="button">Включить уведомления</button>
+      </div>
+
+      <div class="notice">
+        <b id="noticeTitle">⚠ Информация о данных</b>
+        <p id="noticeText">Архивные значения не обновляются автоматически.</p>
+      </div>
+    </aside>
+
+    <main id="mainContent">
+      <div class="heading">
+        <div>
+          <h2 id="mapTitle">Карта гидропостов</h2>
+          <p id="mapSubtitle">Офлайн-архив наблюдений.</p>
+        </div>
+        <div class="pill" id="status" role="status" aria-live="polite">● Офлайн-архив</div>
+      </div>
+
+      <!-- 1. Панель мониторинга уровня воды Arduino -->
+      <section class="arduino-panel" id="arduinoPanelSection" aria-labelledby="arduinoTitle">
+        <div class="arduino-panel-head">
+          <div>
+            <h3 id="arduinoTitle">🚨 Датчик уровня воды Arduino (USB Serial)</h3>
+            <p id="arduinoHelp">Подключите Arduino по USB (9600 бод) для мониторинга уровня воды в реальном времени.</p>
+          </div>
+          <div class="arduino-head-badges">
+            <span id="arduinoSourceBadge" class="source-pill source-real">Режим: USB Serial</span>
+            <span id="arduinoConnection" class="connection-pill" role="status">● Отключён</span>
+          </div>
+        </div>
+
+        <div id="serialEnvWarning" class="serial-env-warning" hidden>
+          <strong id="serialEnvWarningTitle">⚠ Ограничение окружения для Web Serial API</strong>
+          <p id="serialEnvWarningText">Для работы с USB-портом откройте сайт в браузере Google Chrome или Microsoft Edge через локальный сервер (например: <code>python -m http.server 8000</code> и перейдите на <code>http://localhost:8000</code>).</p>
+        </div>
+
+        <div class="arduino-controls">
+          <button class="btn arduino-connect" id="arduinoConnect" type="button">🔌 Подключить Arduino</button>
+          <button class="btn" id="arduinoDisconnect" type="button" disabled>Отключить</button>
+          <button class="btn arduino-mute-btn" id="arduinoMuteBtn" type="button" aria-pressed="false" title="Включить или отключить только звуковой сигнал, сохранив визуальную тревогу">🔔 Звук: Вкл</button>
+
+          <label class="alarm-setting" for="warningThreshold" title="Порог перехода в состояние предупреждения">
+            <span id="warnThresholdLabel">Предупреждение, %</span>
+            <input id="warningThreshold" type="number" min="1" max="99" value="50">
+          </label>
+
+          <label class="alarm-setting" for="alarmThreshold" title="Порог включения звуковой и визуальной тревоги">
+            <span id="alarmThresholdLabel">Порог тревоги, %</span>
+            <input id="alarmThreshold" type="number" min="2" max="100" value="80">
+          </label>
+
+          <label class="alarm-setting" for="historyInterval" title="Периодичность сохранения плановых измерений в историю (смены статуса пишутся мгновенно)">
+            <span id="historyIntervalLabel">Запись в историю</span>
+            <select id="historyInterval">
+              <option value="1">каждую 1 с</option>
+              <option value="5" selected>каждые 5 с</option>
+              <option value="10">каждые 10 с</option>
+              <option value="30">каждые 30 с</option>
+              <option value="60">каждые 60 с</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- Карточки телеметрии датчика -->
+        <div class="arduino-telemetry-grid">
+          <div class="telemetry-card">
+            <span class="telemetry-label" id="lblStationName">Название / ID станции</span>
+            <strong class="telemetry-value" id="arduinoStationName">—</strong>
+            <small class="telemetry-sub" id="arduinoParameterInfo">Параметр: water_level (%)</small>
+          </div>
+          <div class="telemetry-card">
+            <span class="telemetry-label" id="lblSensorState">Состояние датчика</span>
+            <strong class="telemetry-value" id="arduinoSensorState">Отключён</strong>
+            <small class="telemetry-sub" id="arduinoPortInfo">Порт: не выбран (9600 бод)</small>
+          </div>
+          <div class="telemetry-card">
+            <span class="telemetry-label" id="lblCurrentStatus">Текущий статус</span>
+            <strong class="telemetry-value status-text-offline" id="arduinoWaterStatus">Ожидание данных</strong>
+            <small class="telemetry-sub" id="arduinoThresholdSummary">Норма &lt;50% · Пред. 50–79% · Трев. ≥80%</small>
+          </div>
+          <div class="telemetry-card">
+            <span class="telemetry-label" id="lblLastMeasured">Последнее измерение</span>
+            <strong class="telemetry-value" id="arduinoLastTime">—</strong>
+            <small class="telemetry-sub" id="arduinoDataAge">Свежесть данных: ожидание</small>
+          </div>
+        </div>
+
+        <div id="arduinoAlert" class="arduino-alert" data-level="offline" aria-live="assertive">
+          <span id="arduinoAlertIcon">ℹ️</span>
+          <div class="arduino-alert-body">
+            <strong id="arduinoAlertTitle">Ожидание подключения датчика</strong>
+            <small id="arduinoAlertText">Подключите Arduino по USB или используйте тестовый стенд ниже для проверки порогов и оповещений.</small>
+          </div>
+        </div>
+
+        <div class="water-meter-wrap">
+          <div class="water-meter-header">
+            <span id="waterMeterCaption">Визуальный индикатор заполнения</span>
+            <span id="waterMeterStaleBadge" class="stale-badge" hidden>⏱ Данные устарели (&gt; 5 с)</span>
+          </div>
+          <div class="water-meter-track" id="waterMeterTrack">
+            <div id="waterMeterFill" class="water-meter-fill" style="width:0%"></div>
+            <div id="warnMarkerLine" class="meter-threshold-marker warn-marker" style="left:50%" title="Порог предупреждения: 50%"></div>
+            <div id="alarmMarkerLine" class="meter-threshold-marker alarm-marker" style="left:80%" title="Порог тревоги: 80%"></div>
+          </div>
+          <div class="water-meter-labels">
+            <span>0% (Норма)</span>
+            <strong id="waterMeterValue">—%</strong>
+            <span>100% (Макс.)</span>
+          </div>
+        </div>
+
+        <p class="arduino-meta" id="arduinoMeta">Формат JSON: <code>{"station_id":"dam_01","parameter":"water_level","value":42,"unit":"%"}</code> · Скорость: 9600 бод · Контроль потери данных: 5 секунд.</p>
+
+        <!-- Отдельный тестовый режим для проверки без физической Arduino -->
+        <details class="arduino-sim-box" id="arduinoSimDetails">
+          <summary id="arduinoSimSummary">🧪 Тестовый режим и проверка сценариев (без записи в реальную историю Arduino)</summary>
+          <div class="arduino-sim-content">
+            <p class="sim-note" id="arduinoSimNote">Тестовые измерения позволяют проверить пороги (49%, 50%, 79%, 80%, 100%), звук, потерю сигнала (&gt;5 с) и графики. Они помечаются как демонстрационные и <b>не смешиваются</b> с реальной историей USB Arduino в localStorage.</p>
+            <div class="sim-controls-row">
+              <label class="alarm-setting" for="simStationSelect">Станция:
+                <select id="simStationSelect">
+                  <option value="dam_01">dam_01 (Плотина №1)</option>
+                  <option value="dam_02">dam_02 (Гидропост №2)</option>
+                  <option value="reservoir_astana">reservoir_astana</option>
+                </select>
+              </label>
+              <button class="btn sim-btn sim-normal" type="button" data-sim-val="25">25% (Норма)</button>
+              <button class="btn sim-btn sim-normal" type="button" data-sim-val="49">49% (Граница нормы)</button>
+              <button class="btn sim-btn sim-warn" type="button" data-sim-val="50">50% (Предупреждение)</button>
+              <button class="btn sim-btn sim-warn" type="button" data-sim-val="79">79% (Пред. макс)</button>
+              <button class="btn sim-btn sim-alarm" type="button" data-sim-val="80">80% (Тревога!)</button>
+              <button class="btn sim-btn sim-alarm" type="button" data-sim-val="100">100% (Критическая!)</button>
+            </div>
+            <div class="sim-controls-row">
+              <button class="btn" id="simAutoToggleBtn" type="button">▶ Запустить авто-поток (тест)</button>
+              <button class="btn" id="simTimeoutTestBtn" type="button" title="Отправить пакет и прекратить подачу данных для проверки предупреждения через 5 секунд">⏱ Проверить потерю данных (5 с)</button>
+              <button class="btn" id="simBadJsonTestBtn" type="button" title="Проверить устойчивость к некорректному пакету">🛠 Тест ошибки пакета</button>
+              <button class="btn" id="simResetBtn" type="button">Сбросить тест</button>
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Статистика и Карта гидропостов -->
+      <section class="stats" aria-label="Статистика архива">
+        <div class="stat"><label id="s1">Всего постов</label><strong id="count">24</strong><small id="s1note">Посты в архиве</small></div>
+        <div class="stat"><label id="s2">Дата снимка</label><strong id="date">09.08.2026</strong><small id="s2note">Архивные данные</small></div>
+        <div class="stat"><label id="s3">Источник</label><strong class="source-name">Urpaq Monitor</strong><small id="s3note">Архивная копия / демонстрационные данные</small></div>
+      </section>
+
+      <div class="mapwrap" id="mapwrap">
+        <div id="map" role="application" aria-label="Карта архивных гидропостов"></div>
+        <div class="maptools">
+          <span class="map-label">KAZAKHSTAN · OFFLINE ARCHIVE</span>
+          <button id="reset" type="button">⌖ <span id="resetText">Весь Казахстан</span></button>
+        </div>
+      </div>
+
+      <!-- 2. Графики и аналитика уровня воды -->
+      <section class="arduino-analytics-panel" id="arduinoAnalyticsSection" aria-labelledby="analyticsTitle">
+        <div class="panel-section-head">
+          <div>
+            <h3 id="analyticsTitle">📈 График и аналитика уровня воды</h3>
+            <p id="analyticsSubtitle">Динамика изменения уровня воды во времени, минимальные, максимальные и средние показатели.</p>
+          </div>
+          <span id="analyticsSourceBadge" class="source-pill source-real">Источник: Реальные показания Arduino</span>
+        </div>
+
+        <div class="analytics-filters">
+          <label class="filter-group" for="analyticsSourceSelect">
+            <span id="lblAnalyticsSource">Источник данных</span>
+            <select id="analyticsSourceSelect">
+              <option value="real">🟢 Реальные измерения Arduino (USB)</option>
+              <option value="demo">🟣 Демо / Тестовые данные (Симулятор)</option>
+            </select>
+          </label>
+
+          <label class="filter-group" for="analyticsStationSelect">
+            <span id="lblAnalyticsStation">Станция</span>
+            <select id="analyticsStationSelect">
+              <option value="all">Все станции</option>
+            </select>
+          </label>
+
+          <label class="filter-group" for="analyticsPeriodSelect">
+            <span id="lblAnalyticsPeriod">Период</span>
+            <select id="analyticsPeriodSelect">
+              <option value="5m">Последние 5 минут</option>
+              <option value="1h">Последний 1 час</option>
+              <option value="24h">Последние 24 часа</option>
+              <option value="7d">Последние 7 дней</option>
+              <option value="all" selected>За всё время</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="analytics-stats-grid">
+          <div class="stat analytics-stat-card">
+            <label id="lblMinLevel">Минимум за период</label>
+            <strong id="statMinLevel">—%</strong>
+            <small id="statMinNote">Минимальный уровень</small>
+          </div>
+          <div class="stat analytics-stat-card">
+            <label id="lblMaxLevel">Максимум за период</label>
+            <strong id="statMaxLevel">—%</strong>
+            <small id="statMaxNote">Пиковый уровень</small>
+          </div>
+          <div class="stat analytics-stat-card">
+            <label id="lblAvgLevel">Среднее значение</label>
+            <strong id="statAvgLevel">—%</strong>
+            <small id="statAvgNote">Средний уровень воды</small>
+          </div>
+          <div class="stat analytics-stat-card">
+            <label id="lblSamplesCount">Количество записей</label>
+            <strong id="statSamplesCount">0</strong>
+            <small id="statSamplesNote">В выбранном фильтре</small>
+          </div>
+        </div>
+
+        <div class="chart-box" id="arduinoChartBox">
+          <div class="chart-header-bar">
+            <span id="chartLegendText">Уровень воды (%) · Пунктир: предупреждение и тревога</span>
+            <span id="chartHoverInfo" class="chart-hover-info">Наведите на точку графика для деталей</span>
+          </div>
+          <div class="chart-svg-wrap" id="arduinoChartWrap">
+            <svg id="arduinoChartSvg" viewBox="0 0 820 240" role="img" aria-label="График уровня воды во времени"></svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. История показаний Arduino -->
+      <section class="arduino-history-panel" id="arduinoHistorySection" aria-labelledby="historyTitle">
+        <div class="panel-section-head">
+          <div>
+            <h3 id="historyTitle">📋 История показаний Arduino</h3>
+            <p id="historySubtitle">Автоматический журнал реальных измерений датчика (сохраняется в браузере до 2 000 записей).</p>
+          </div>
+          <div class="history-head-badges">
+            <span id="historyStorageBadge" class="connection-pill connected">💾 localStorage: Активен</span>
+            <span id="historyCountBadge" class="pill">Записей: 0 / 2000</span>
+          </div>
+        </div>
+
+        <div class="history-toolbar">
+          <div class="history-filters">
+            <label class="filter-group" for="historyStationFilter">
+              <span id="lblHistStationFilter">Фильтр станции</span>
+              <select id="historyStationFilter">
+                <option value="all">Все станции</option>
+              </select>
+            </label>
+            <label class="filter-group" for="historyStatusFilter">
+              <span id="lblHistStatusFilter">Статус</span>
+              <select id="historyStatusFilter">
+                <option value="all">Все статусы</option>
+                <option value="normal">Норма</option>
+                <option value="warning">Предупреждение</option>
+                <option value="alarm">Тревога</option>
+              </select>
+            </label>
+          </div>
+          <div class="history-actions">
+            <a href="history.html" target="_blank" class="btn">🗂 Открыть в отдельной вкладке ↗</a>
+            <button class="btn arduino-connect" id="exportCsvBtn" type="button">📥 Экспорт в CSV (Excel)</button>
+            <button class="btn btn-danger-outline" id="clearHistoryBtn" type="button">🗑 Очистить историю</button>
+          </div>
+        </div>
+
+        <div id="historyConfirmBar" class="history-confirm-bar" hidden>
+          <span>Вы уверены, что хотите безвозвратно удалить всю сохранённую историю показаний Arduino?</span>
+          <div class="history-confirm-Btns">
+            <button class="btn btn-danger-solid" id="confirmClearYesBtn" type="button">Да, очистить</button>
+            <button class="btn" id="confirmClearNoBtn" type="button">Отмена</button>
+          </div>
+        </div>
+
+        <div class="history-table-wrap">
+          <table class="history-table" aria-label="Таблица истории показаний Arduino">
+            <thead>
+              <tr>
+                <th id="thDate">Дата</th>
+                <th id="thTime">Время</th>
+                <th id="thStation">ID станции</th>
+                <th id="thLevel">Уровень воды</th>
+                <th id="thStatus">Статус</th>
+              </tr>
+            </thead>
+            <tbody id="arduinoHistoryTbody"></tbody>
+          </table>
+          <div id="arduinoHistoryEmpty" class="history-empty-state">
+            Реальных показаний Arduino пока нет. Подключите датчик через USB, чтобы измерения автоматически сохранялись в историю.
+          </div>
+        </div>
+      </section>
+
+      <div class="foot">
+        <span id="footnote">Офлайн-архив · история Павлодара предоставлена для демонстрации; автообновления нет.</span>
+        <span class="foot-source" id="origLink">Urpaq Monitor · архив наблюдений</span>
+      </div>
+    </main>
+  </div>
+
+  <button class="mobile-toggle-btn" id="mobileToggleBtn" type="button"><span aria-hidden="true">📋</span> <span id="mobileToggleText">Список постов</span></button>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

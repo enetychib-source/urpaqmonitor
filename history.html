@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1728">
+  <meta name="description" content="Urpaq Monitor — История показаний датчика уровня воды Arduino.">
+  <title>История показаний датчика воды — Urpaq Monitor</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">≈</div>
+      <div>URPAQ <span class="brand-accent">MONITOR</span><small id="subHeader">Журнал и аналитика датчика уровня воды Arduino</small></div>
+    </div>
+    <div class="top-right">
+      <a href="index.html" class="btn">← На главную (Карта)</a>
+      <button class="btn arduino-connect" id="histConnectBtn" type="button">🔌 Подключить Arduino</button>
+      <button class="btn" id="histDisconnectBtn" type="button" disabled>Отключить</button>
+      <button class="btn" id="themeToggle" type="button" title="Переключить тему">🌙 Темная</button>
+    </div>
+  </header>
+
+  <main style="max-width: 1240px; margin: 0 auto; padding: 24px;">
+    <div class="heading">
+      <div>
+        <h2>📋 История показаний датчика уровня воды</h2>
+        <p>Страница синхронизируется с главным окном в реальном времени через <code>localStorage</code>, а также позволяет подключать Arduino напрямую.</p>
+      </div>
+      <div class="arduino-head-badges">
+        <span id="liveSyncBadge" class="source-pill source-real">🔄 Автосинхронизация: Активна</span>
+        <span id="histConnectionBadge" class="connection-pill">● USB: Не подключено в этой вкладке</span>
+      </div>
+    </div>
+
+    <!-- Карточки оперативной сводки по истории -->
+    <section class="analytics-stats-grid" aria-label="Сводка по измерениям">
+      <div class="stat analytics-stat-card">
+        <label>Последнее измерение</label>
+        <strong id="summaryLastLevel">—%</strong>
+        <small id="summaryLastMeta">Нет записей</small>
+      </div>
+      <div class="stat analytics-stat-card">
+        <label>Минимум (по фильтру)</label>
+        <strong id="summaryMinLevel">—%</strong>
+        <small id="summaryMinMeta">—</small>
+      </div>
+      <div class="stat analytics-stat-card">
+        <label>Максимум (по фильтру)</label>
+        <strong id="summaryMaxLevel">—%</strong>
+        <small id="summaryMaxMeta">—</small>
+      </div>
+      <div class="stat analytics-stat-card">
+        <label>Средний уровень / Тревог</label>
+        <strong id="summaryAvgLevel">—%</strong>
+        <small id="summaryAlarmCount">Срабатываний тревоги: 0</small>
+      </div>
+    </section>
+
+    <!-- График истории уровня воды -->
+    <section class="arduino-analytics-panel" style="margin-top: 0;">
+      <div class="panel-section-head">
+        <div>
+          <h3>📈 Динамика уровня воды по сохранённой истории</h3>
+          <p>Наведите курсор на любую точку для просмотра точного времени, станции и значения.</p>
+        </div>
+        <span id="chartPointDetails" class="source-pill source-real">Выбраны все доступные записи</span>
+      </div>
+      <div class="chart-box">
+        <div class="chart-svg-wrap">
+          <svg id="historyChartSvg" viewBox="0 0 900 230" role="img" aria-label="График истории показаний датчика уровня воды"></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Основной раздел таблицы истории и управления -->
+    <section class="arduino-history-panel">
+      <div class="panel-section-head">
+        <div>
+          <h3>🗂 Журнал сохранённых измерений Arduino</h3>
+          <p>Новые записи автоматически добавляются сверху. Хранится до 2 000 последних измерений.</p>
+        </div>
+        <div class="history-head-badges">
+          <span id="storageStateBadge" class="connection-pill connected">💾 Хранилище: ОК</span>
+          <span id="totalRecordsBadge" class="pill">Записей: 0 / 2000</span>
+        </div>
+      </div>
+
+      <div class="history-toolbar">
+        <div class="history-filters">
+          <label class="filter-group" for="filterStation">
+            <span>Станция</span>
+            <select id="filterStation">
+              <option value="all">Все станции</option>
+            </select>
+          </label>
+
+          <label class="filter-group" for="filterStatus">
+            <span>Статус</span>
+            <select id="filterStatus">
+              <option value="all">Все статусы</option>
+              <option value="normal">Норма (&lt; 50%)</option>
+              <option value="warning">Предупреждение (50–79%)</option>
+              <option value="alarm">Тревога (≥ 80%)</option>
+            </select>
+          </label>
+
+          <label class="filter-group" for="filterPeriod">
+            <span>Период времени</span>
+            <select id="filterPeriod">
+              <option value="all" selected>За всё время</option>
+              <option value="5m">Последние 5 минут</option>
+              <option value="1h">Последний 1 час</option>
+              <option value="24h">Последние 24 часа</option>
+              <option value="7d">Последние 7 дней</option>
+            </select>
+          </label>
+
+          <label class="filter-group" for="filterSearch">
+            <span>Поиск по дате / времени / ID</span>
+            <input id="filterSearch" class="search" type="search" placeholder="Напр. dam_01 или 14:20..." style="padding: 7px 10px; font-size: 12px; min-width: 190px;">
+          </label>
+        </div>
+
+        <div class="history-actions">
+          <button class="btn" id="addTestRecordBtn" type="button" title="Добавить тестовую запись для проверки таблицы и экспорта">➕ Тестовая запись</button>
+          <button class="btn arduino-connect" id="exportCsvBtn" type="button">📥 Скачать CSV (Excel)</button>
+          <button class="btn btn-danger-outline" id="clearHistoryBtn" type="button">🗑 Очистить историю</button>
+        </div>
+      </div>
+
+      <div id="confirmClearBox" class="history-confirm-bar" hidden>
+        <span>Удалить все сохранённые показания датчика уровня воды из браузера?</span>
+        <div class="history-confirm-Btns">
+          <button class="btn btn-danger-solid" id="confirmClearYes" type="button">Да, удалить всё</button>
+          <button class="btn" id="confirmClearNo" type="button">Отмена</button>
+        </div>
+      </div>
+
+      <div class="history-table-wrap" style="max-height: 480px;">
+        <table class="history-table" aria-label="Таблица истории показаний датчика уровня воды">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Дата</th>
+              <th>Время</th>
+              <th>ID станции</th>
+              <th>Уровень воды (%)</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody"></tbody>
+        </table>
+        <div id="historyEmptyState" class="history-empty-state">
+          Записей пока нет. Подключите Arduino на главной странице или в этой вкладке (либо нажмите «➕ Тестовая запись» для проверки).
+        </div>
+      </div>
+    </section>
+
+    <div class="foot">
+      <span>Urpaq Monitor · Автономный журнал истории показаний датчика уровня воды Arduino</span>
+      <span class="foot-source">Кодировка экспорта: UTF-8 с BOM (совместимо с Microsoft Excel)</span>
+    </div>
+  </main>
+
+  <script src="history.js"></script>
+</body>
+</html>

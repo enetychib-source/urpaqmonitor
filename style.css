@@ -1,0 +1,619 @@
+:root{color-scheme:dark;--bg:#08111f;--panel:#101d30;--panel2:#14243a;--text:#edf5ff;--muted:#92a6bd;--line:#26384e;--blue:#25b8f2;--blue2:#168fd0;--shadow:0 16px 40px #0003}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button,a,select{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}.top{height:auto;min-height:76px;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);background:#0b1728;position:relative;z-index:10}.brand{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:850;letter-spacing:.5px;white-space:nowrap}.logo{width:42px;height:42px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#12395a,#0b233a);border:1px solid #23658d;color:#5dd5ff;font-size:31px;line-height:1;box-shadow:0 0 24px #0ea5e922}.brand-accent{color:var(--blue)}.brand small{display:block;font-size:11px;font-weight:500;letter-spacing:0;color:var(--muted);margin-top:1px}.top-right{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}.tg-btn,.btn,.top-right select{border:1px solid var(--line);border-radius:9px;padding:9px 12px;background:var(--panel2);color:var(--text);font-size:12px;font-weight:650}.tg-btn{color:#65d0ff}.btn:hover,.tg-btn:hover,.top-right select:hover{border-color:var(--blue);text-decoration:none}.layout{display:grid;grid-template-columns:310px minmax(0,1fr);min-height:calc(100vh - 76px)}aside{padding:24px 18px;border-right:1px solid var(--line);background:#0b1728;min-width:0}.title{font-size:25px;line-height:1.2;margin:0 0 10px;font-weight:800;letter-spacing:-.5px}.muted{font-size:12px;color:var(--muted);margin:0 0 17px}.searchlabel,.sect{display:block;font-size:10px;font-weight:800;letter-spacing:1px;color:#9eb5cd;margin:22px 0 9px}.search{width:100%;border:1px solid var(--line);background:#081525;color:var(--text);padding:11px 12px;border-radius:9px;outline:none}.search:focus{border-color:var(--blue);box-shadow:0 0 0 3px #25b8f21c}.cities{display:grid;grid-template-columns:1fr;gap:7px}.city{width:100%;text-align:left;padding:10px 10px;border:1px solid var(--line);border-radius:9px;background:linear-gradient(145deg,#122238,#0e1a2b);color:var(--text);transition:border-color .15s,transform .15s}.city:hover{border-color:#278fc1;transform:translateY(-1px)}.city-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}.city strong{font-size:11px;line-height:1.4;font-weight:700}.city small{display:block;color:var(--muted);font-size:10px;margin-top:5px}.badge{flex:none;border-radius:6px;padding:3px 5px;font-size:10px;font-weight:800;white-space:nowrap}.push-box,.notice{margin-top:20px;border:1px solid var(--line);border-radius:11px;padding:13px;background:#101d30}.push-box p{font-size:12px;margin:0 0 10px;font-weight:650}.push-btn{width:100%;font-size:12px}.notice b{font-size:11px;color:#ffc66b}.notice p{font-size:11px;color:var(--muted);margin:7px 0 0;line-height:1.6}main{padding:24px;min-width:0}.heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.heading h2{margin:0;font-size:22px;letter-spacing:-.4px}.heading p{margin:5px 0 0;color:var(--muted);font-size:12px}.pill{flex:none;background:#142c3c;color:#59ceff;border:1px solid #21516c;padding:6px 11px;border-radius:20px;font-size:10px;font-weight:750}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}.stat{min-width:0;padding:15px 16px;border:1px solid var(--line);border-radius:12px;background:linear-gradient(135deg,#112138,#0d192a);box-shadow:var(--shadow)}.stat label{display:block;color:var(--muted);font-size:11px}.stat strong{display:block;font-size:23px;line-height:1.35;margin:3px 0 2px;overflow-wrap:anywhere}.stat small{display:block;color:#7f95ad;font-size:10px}.source-name{font-size:16px!important}.mapwrap{position:relative;height:min(66vh,760px);min-height:460px;overflow:hidden;border:1px solid #2a4058;border-radius:13px;background:#101d30;box-shadow:var(--shadow)}#map{position:absolute;inset:0;width:100%;height:100%;background:#101d30}.maptools{position:absolute;z-index:500;left:12px;right:12px;bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;pointer-events:none}.maptools>*{pointer-events:auto}.maptools button{padding:9px 12px;border:1px solid #354b64;border-radius:8px;background:#0b1728ed;color:#edf5ff;font-size:11px;font-weight:700;box-shadow:0 4px 14px #0003}.maptools button:hover{border-color:var(--blue)}.map-label{padding:8px 10px;background:#0b1728dc;border:1px solid #354b64;border-radius:7px;color:#a7c1d9;font-size:9px;font-weight:800;letter-spacing:1px}.foot{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-top:13px;font-size:11px;color:var(--muted)}.foot-source{color:#7890a8}.info.legend{padding:10px 12px;background:#0b1728eF;color:#e8f2ff;border:1px solid #34475e;border-radius:9px;box-shadow:0 3px 14px #0003;font-size:10px;line-height:1.9}.info.legend #legTitle{font-weight:800;margin-bottom:3px}.info.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.leaflet-popup-content-wrapper,.leaflet-popup-tip{background:#101d30;color:#edf5ff}.leaflet-popup-content-wrapper{border:1px solid #34475e;border-radius:10px}.leaflet-popup-content{margin:13px;max-width:360px}.popup-title{font-weight:800;font-size:13px;margin-bottom:7px}.popup-row{font-size:11px;margin:4px 0}.popup-note{font-size:10px;color:#ffc66b;margin-top:8px}.leaflet-container a.leaflet-popup-close-button{color:#d9eaff}.leaflet-control-zoom a{background:#0b1728!important;color:#edf5ff!important;border-color:#34475e!important}.mobile-toggle-btn{display:none}.dark{--bg:#f1f5f9;--panel:#fff;--panel2:#fff;--text:#172337;--muted:#5c6d82;--line:#d5e0eb;--shadow:0 12px 30px #0f29400d;color:var(--text);background:var(--bg);color-scheme:light}.dark .top,.dark aside{background:#fff}.dark .city,.dark .stat,.dark .push-box,.dark .notice{background:#fff}.dark .search{background:#f8fafc;color:#172337}.dark .mapwrap,#map{background:#101d30}.dark .maptools button,.dark .map-label{background:#fff;color:#172337;border-color:#cbd8e5}.dark .info.legend{background:#fff;color:#172337;border-color:#cbd8e5}.dark .leaflet-popup-content-wrapper,.dark .leaflet-popup-tip{background:#fff;color:#172337}.dark .leaflet-control-zoom a{background:#fff!important;color:#172337!important;border-color:#cbd8e5!important}
+@media(max-width:1000px){.layout{grid-template-columns:275px minmax(0,1fr)}main{padding:18px}aside{padding:20px 14px}.stats{gap:8px}.stat{padding:12px}.stat strong{font-size:20px}}
+@media(max-width:760px){.top{padding:12px 14px;align-items:flex-start}.brand{font-size:16px}.logo{width:36px;height:36px}.brand small{max-width:210px;white-space:normal;font-size:10px}.top-right{gap:6px}.top-right .tg-btn{display:none}.top-right .btn,.top-right select{padding:8px;font-size:11px}.layout{display:block;min-height:calc(100vh - 65px)}aside{display:none;border-right:0;border-bottom:1px solid var(--line);padding:17px}.layout aside.active{display:block}main{padding:15px}.layout main.hidden-mobile{display:none}.title{font-size:23px}.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stat{padding:10px}.stat strong{font-size:17px}.stat label,.stat small{font-size:9px}.heading h2{font-size:20px}.mapwrap{height:58vh;min-height:400px}.mobile-toggle-btn{display:block;position:fixed;z-index:1000;bottom:14px;left:50%;transform:translateX(-50%);border:1px solid #2679a4;border-radius:24px;background:#0c2238;color:#eaf7ff;padding:11px 17px;font-size:12px;font-weight:750;box-shadow:0 7px 24px #0005}.foot{padding-bottom:52px}}
+@media(max-width:430px){.brand{gap:8px;font-size:14px}.brand small{max-width:145px}.top-right .btn{max-width:86px}.top-right select{max-width:83px}.stats{grid-template-columns:1fr}.stat{display:grid;grid-template-columns:1fr auto;gap:0 10px;align-items:center}.stat label,.stat small{grid-column:1}.stat strong{grid-column:2;grid-row:1/3;text-align:right}.mapwrap{min-height:370px;height:54vh}.map-label{font-size:8px;padding:7px}.maptools button{font-size:10px;padding:8px}.cities{grid-template-columns:1fr}}
+
+
+/* Live Arduino flood sensor panel */
+.arduino-panel{margin:0 0 16px;padding:17px;border:1px solid #27506b;border-radius:13px;background:linear-gradient(135deg,#10253a,#0d1b2d);box-shadow:var(--shadow)}
+.arduino-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.arduino-panel h3{margin:0;font-size:16px}.arduino-panel p{margin:5px 0 0;color:var(--muted);font-size:11px;line-height:1.5}.connection-pill{flex:none;padding:6px 9px;border:1px solid var(--line);border-radius:20px;font-size:10px;font-weight:800;color:var(--muted)}.connection-pill.connected{color:#54dfa0;border-color:#247a59;background:#12402e55}.arduino-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:13px}.arduino-connect{background:#123d57;border-color:#246c91}.arduino-controls button:disabled{opacity:.45;cursor:not-allowed}.alarm-setting{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:11px}.alarm-setting input{width:64px;padding:7px;border:1px solid var(--line);border-radius:7px;background:#081525;color:var(--text)}.arduino-alert{display:flex;align-items:center;gap:10px;margin-top:13px;padding:11px 12px;border:1px solid #31465d;border-radius:9px;background:#0b1929}.arduino-alert>span{font-size:22px}.arduino-alert strong,.arduino-alert small{display:block}.arduino-alert strong{font-size:12px}.arduino-alert small{font-size:10px;color:var(--muted);margin-top:3px}.arduino-alert[data-level="warning"]{border-color:#b8872c;background:#4a351622}.arduino-alert[data-level="alarm"]{border-color:#f04444;background:#7f1d1d33;animation:alarmPulse 1.2s infinite}.arduino-alert[data-level="normal"]{border-color:#237d59;background:#14532d22}.arduino-alert[data-level="offline"]{border-color:#31465d}.water-meter-wrap{margin-top:13px}.water-meter-track{height:12px;border-radius:99px;background:#26384e;overflow:hidden}.water-meter-fill{height:100%;border-radius:99px;background:#25b8f2;transition:width .25s,background .25s}.water-meter-fill.warning{background:#f5a623}.water-meter-fill.alarm{background:#ef4444}.water-meter-labels{display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:5px}.water-meter-labels strong{font-size:17px;color:var(--text)}.arduino-meta{font-size:10px!important;margin-top:10px!important}.dark .arduino-panel{background:#fff;border-color:#d5e0eb}.dark .arduino-alert{background:#f8fafc}.dark .alarm-setting input{background:#f8fafc;color:#172337;border-color:#d5e0eb}.dark .water-meter-track{background:#dbe5ef}
+@keyframes alarmPulse{0%,100%{box-shadow:0 0 0 0 #ef444422}50%{box-shadow:0 0 0 4px #ef444422}}
+@media(max-width:520px){.arduino-panel{padding:13px}.arduino-panel-head{display:block}.connection-pill{display:inline-block;margin-top:8px}.arduino-controls{align-items:stretch}.arduino-controls button{flex:1}.alarm-setting{width:100%;margin-top:3px}}
+
+
+/* --- Extended Urpaq Monitor: Arduino Telemetry, Analytics & History --- */
+html {
+  scroll-behavior: smooth;
+}
+
+.nav-jump-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  text-decoration: none;
+}
+
+.arduino-head-badges,
+.history-head-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.source-pill {
+  flex: none;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  border: 1px solid #246c91;
+  background: #123d5788;
+  color: #7dd3fc;
+}
+
+.source-pill.source-demo {
+  border-color: #7c3aed;
+  background: #4c1d9555;
+  color: #d8b4fe;
+}
+
+.connection-pill.error {
+  color: #fca5a5;
+  border-color: #b91c1c;
+  background: #7f1d1d55;
+}
+
+.connection-pill.stale {
+  color: #fcd34d;
+  border-color: #b45309;
+  background: #78350f55;
+}
+
+.serial-env-warning {
+  margin-top: 12px;
+  padding: 11px 13px;
+  border: 1px solid #b8872c;
+  border-radius: 9px;
+  background: #4a351633;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.serial-env-warning strong {
+  display: block;
+  color: #ffc66b;
+  margin-bottom: 3px;
+}
+
+.serial-env-warning p {
+  margin: 0;
+  color: var(--text);
+}
+
+.serial-env-warning code,
+.arduino-meta code {
+  padding: 2px 5px;
+  border-radius: 5px;
+  background: #081525;
+  border: 1px solid var(--line);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  color: #7dd3fc;
+}
+
+.alarm-setting select {
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #081525;
+  color: var(--text);
+  font-size: 11px;
+}
+
+.arduino-mute-btn[aria-pressed="true"] {
+  border-color: #f59e0b;
+  background: #4a351644;
+  color: #fcd34d;
+}
+
+/* Telemetry Grid */
+.arduino-telemetry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 13px;
+}
+
+.telemetry-card {
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #0b1929;
+  min-width: 0;
+}
+
+.telemetry-label {
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 3px;
+}
+
+.telemetry-value {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+.telemetry-sub {
+  display: block;
+  font-size: 10px;
+  color: #7f95ad;
+  margin-top: 3px;
+}
+
+.status-text-normal {
+  color: #54dfa0 !important;
+}
+
+.status-text-warning {
+  color: #fbbf24 !important;
+}
+
+.status-text-alarm {
+  color: #f87171 !important;
+}
+
+.status-text-stale {
+  color: #fcd34d !important;
+}
+
+.status-text-offline {
+  color: var(--muted) !important;
+}
+
+/* Water Meter enhancements */
+.water-meter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.stale-badge {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 700;
+  background: #78350f66;
+  border: 1px solid #d97706;
+  color: #fde68a;
+}
+
+.water-meter-track {
+  position: relative;
+  height: 14px;
+}
+
+.water-meter-fill.stale {
+  opacity: 0.4;
+  filter: grayscale(0.45);
+}
+
+.meter-threshold-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.meter-threshold-marker.warn-marker {
+  background: #f59e0b;
+  box-shadow: 0 0 4px #0008;
+}
+
+.meter-threshold-marker.alarm-marker {
+  background: #ef4444;
+  box-shadow: 0 0 4px #0008;
+}
+
+.water-meter-labels strong.stale-value {
+  color: #fbbf24;
+  font-size: 14px;
+}
+
+/* Simulator / Test Bench Box */
+.arduino-sim-box {
+  margin-top: 12px;
+  border: 1px dashed #315470;
+  border-radius: 10px;
+  background: #091625;
+  padding: 9px 12px;
+}
+
+.arduino-sim-box summary {
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+  color: #7dd3fc;
+  user-select: none;
+}
+
+.arduino-sim-content {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid var(--line);
+}
+
+.sim-note {
+  margin: 0 0 9px !important;
+  font-size: 11px !important;
+  color: var(--muted);
+}
+
+.sim-controls-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 7px;
+}
+
+.sim-btn {
+  padding: 6px 10px;
+  font-size: 11px;
+}
+
+.sim-btn.sim-normal {
+  border-color: #1f6f50;
+  color: #6ee7b7;
+}
+
+.sim-btn.sim-warn {
+  border-color: #9a6b1f;
+  color: #fcd34d;
+}
+
+.sim-btn.sim-alarm {
+  border-color: #992929;
+  color: #fca5a5;
+}
+
+/* Analytics & History Sections */
+.arduino-analytics-panel,
+.arduino-history-panel {
+  margin: 18px 0 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: linear-gradient(135deg, #102136, #0c1828);
+  box-shadow: var(--shadow);
+}
+
+.panel-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.panel-section-head h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.panel-section-head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.analytics-filters,
+.history-toolbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.history-filters,
+.history-actions {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.filter-group select {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #081525;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.analytics-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.analytics-stat-card {
+  padding: 12px 14px;
+}
+
+.analytics-stat-card strong {
+  font-size: 20px;
+}
+
+/* SVG Chart Box */
+.chart-box {
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #091524;
+  padding: 12px;
+}
+
+.chart-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.chart-hover-info {
+  font-weight: 700;
+  color: #7dd3fc;
+}
+
+.chart-svg-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+#arduinoChartSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 195px;
+  max-height: 260px;
+}
+
+/* History Table & Controls */
+.btn-danger-outline {
+  border-color: #7f2727;
+  color: #fca5a5;
+}
+
+.btn-danger-outline:hover {
+  border-color: #ef4444;
+  background: #7f1d1d33;
+}
+
+.btn-danger-solid {
+  border-color: #dc2626;
+  background: #b91c1c;
+  color: #fff;
+}
+
+.history-confirm-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+  padding: 10px 13px;
+  border: 1px solid #dc2626;
+  border-radius: 9px;
+  background: #7f1d1d33;
+  font-size: 12px;
+}
+
+.history-confirm-Btns {
+  display: flex;
+  gap: 8px;
+}
+
+.history-table-wrap {
+  max-height: 360px;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #091524;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.history-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: #102238;
+  color: #9eb5cd;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.history-table tbody td {
+  padding: 9px 12px;
+  border-bottom: 1px solid #16293f;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+.history-table tbody tr:hover {
+  background: #12263f66;
+}
+
+.status-pill {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.status-pill.normal {
+  background: #14532d55;
+  border: 1px solid #22c55e66;
+  color: #6ee7b7;
+}
+
+.status-pill.warning {
+  background: #78350f66;
+  border: 1px solid #f59e0b66;
+  color: #fcd34d;
+}
+
+.status-pill.alarm {
+  background: #7f1d1d66;
+  border: 1px solid #ef444488;
+  color: #fca5a5;
+}
+
+.history-empty-state {
+  padding: 24px 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* Light theme (.dark class in original codebase) overrides */
+.dark .telemetry-card,
+.dark .arduino-sim-box,
+.dark .chart-box,
+.dark .history-table-wrap {
+  background: #f8fafc;
+  border-color: #d5e0eb;
+}
+
+.dark .arduino-analytics-panel,
+.dark .arduino-history-panel {
+  background: #fff;
+  border-color: #d5e0eb;
+}
+
+.dark .alarm-setting select,
+.dark .filter-group select,
+.dark .serial-env-warning code,
+.dark .arduino-meta code {
+  background: #f8fafc;
+  color: #172337;
+  border-color: #d5e0eb;
+}
+
+.dark .history-table thead th {
+  background: #eef4fa;
+  color: #334155;
+  border-bottom-color: #d5e0eb;
+}
+
+.dark .history-table tbody td {
+  border-bottom-color: #e2e8f0;
+  color: #172337;
+}
+
+.dark .history-table tbody tr:hover {
+  background: #f1f5f9;
+}
+
+.dark .status-pill.normal {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #86efac;
+}
+
+.dark .status-pill.warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fcd34d;
+}
+
+.dark .status-pill.alarm {
+  background: #fee2e2;
+  color: #991b1b;
+  border-color: #fca5a5;
+}
+
+.dark .status-text-normal {
+  color: #15803d !important;
+}
+
+.dark .status-text-warning {
+  color: #b45309 !important;
+}
+
+.dark .status-text-alarm {
+  color: #dc2626 !important;
+}
+
+.dark .source-pill {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: #7dd3fc;
+}
+
+.dark .source-pill.source-demo {
+  background: #f3e8ff;
+  color: #6b21a8;
+  border-color: #d8b4fe;
+}
+
+@media (max-width: 900px) {
+  .arduino-telemetry-grid,
+  .analytics-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .nav-jump-btn {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .arduino-telemetry-grid,
+  .analytics-stats-grid {
+    grid-template-columns: 1fr;
+  }
+  .arduino-analytics-panel,
+  .arduino-history-panel {
+    padding: 13px;
+  }
+  .history-actions,
+  .history-filters {
+    width: 100%;
+  }
+  .history-actions button,
+  .filter-group {
+    flex: 1;
+  }
+}
